@@ -1,0 +1,19 @@
+{
+  "name": "hyperpixel-brightness-control",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "author": "VirtualWolf <virtualwolf@virtualwolf.org>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node app.js",
+    "start:dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "mqtt": "^4.3.7",
+    "pigpio": "^3.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}

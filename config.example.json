@@ -1,0 +1,7 @@
+{
+    "brokerAddress": "localhost",
+    "clientId": "display-brightness-control_pi-1",
+    "clean": false,
+    "topic": "automation/hyperpixel",
+    "brightness": "130000"
+}
