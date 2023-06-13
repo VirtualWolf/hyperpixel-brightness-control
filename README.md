@@ -6,23 +6,24 @@ It requires a file in the root of the directory called `config.json` with the fo
 
 ```json
 {
-    "brokerAddress": "localhost",
-    "clientId": "display-brightness-control_pi-1",
+    "brokerAddress": "<MQTT_BROKER_ADDRESS>",
+    "clientId": "<MQTT_CLIENT_ID_TO_CONNECT_AS>",
     "clean": false,
-    "topic": "automation/hyperpixel",
-    "brightness": "130000"
+    "topic": "<MQTT_TOPIC_TO_LISTEN_FOR_MESSAGES_ON>",
+    "brightness": <BRIGHTNESS_VALUE>
 }
 ```
 
-The expected MQTT topic payload looks like this:
+The expected MQTT topic payload looks like this, with `brightness` being optional (if not sent in the message, it will fall back to the brightness configured in `config.json`):
 
 ```json
 {
-    "is_on": <boolean>
+    "is_on": <boolean>,
+    "brightness": <number>
 }
 ```
 
 ## Notes
-* The `brightness` value is the brightness that will be set when the display is on.
+* The `brightness` value in the configuration file and the MQTT payload is the brightness that will be set when the display is on. Values seem to vary even between HyperPixels panels, on one of mine 130000 is a decent brightness without being eye-searing, but on the other anything below 145000 will turn the display entirely off. You may need to experiment.
 * I recommend using [PM2](https://pm2.keymetrics.io) to keep the app running and to start it at boot.
 * Because this talks to the GPIO ports directly by way of the [pigpio](https://github.com/fivdi/pigpio), it _must_ be run as root.

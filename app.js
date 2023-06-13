@@ -27,10 +27,14 @@ client.on('message', (topic, message) => {
     try {
         const json = JSON.parse(message.toString());
 
-        if (json.is_on === true) {
-            console.debug(`Turning display on with duty cycle ${config.brightness}`);
+        if (json.is_on === true || json.brightness) {
+            const brightness = json.brightness
+                ? json.brightness
+                : config.brightness;
 
-            pin.hardwarePwmWrite(1000000, config.brightness);
+            console.debug(`Turning display on with duty cycle ${brightness}`);
+
+            pin.hardwarePwmWrite(1000000, brightness);
         }
 
         if (json.is_on === false) {
