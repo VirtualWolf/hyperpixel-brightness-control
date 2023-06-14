@@ -1,3 +1,4 @@
+const os = require('os');
 const Gpio = require('pigpio').Gpio;
 const mqtt = require('mqtt');
 const config = require('./config.json');
@@ -27,10 +28,19 @@ client.on('message', (topic, message) => {
     try {
         const json = JSON.parse(message.toString());
 
+        const hostname = os.hostname();
+        const target = json.target;
+
         if (json.is_on === true || json.brightness) {
             const brightness = json.brightness
                 ? json.brightness
                 : config.brightness;
+
+            if (target && target !== hostname) {
+                console.debug(`Message is for hostname ${target}, ignoring it`)
+
+                return;
+            }
 
             console.debug(`Turning display on with duty cycle ${brightness}`);
 
