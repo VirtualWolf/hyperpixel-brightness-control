@@ -3,5 +3,6 @@
     "clientId": "display-brightness-control_pi-1",
     "clean": false,
     "topic": "automation/hyperpixel",
-    "brightness": "130000"
+    "frequency": 25000,
+    "brightness": 30000
 }

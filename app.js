@@ -25,6 +25,10 @@ client.on('error', (err) => console.error(err));
 client.on('message', (topic, message) => {
     console.debug(`Message received on topic ${topic}: ${message.toString()}`);
 
+    const frequency = config.frequency
+        ? config.frequency
+        : 8000;
+
     try {
         const json = JSON.parse(message.toString());
 
@@ -42,15 +46,15 @@ client.on('message', (topic, message) => {
                 return;
             }
 
-            console.debug(`Turning display on with duty cycle ${brightness}`);
+            console.debug(`Turning display on with frequency ${frequency} and duty cycle ${brightness}`);
 
-            pin.hardwarePwmWrite(1000000, brightness);
+            pin.hardwarePwmWrite(frequency, brightness);
         }
 
         if (json.is_on === false) {
             console.debug(`Turning display off`);
 
-            pin.hardwarePwmWrite(1000000, 0);
+            pin.hardwarePwmWrite(frequency, 0);
         }
     } catch (err) {
         console.error('Error parsing JSON', err);

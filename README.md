@@ -10,7 +10,8 @@ It requires a file in the root of the directory called `config.json` with the fo
     "clientId": "<MQTT_CLIENT_ID_TO_CONNECT_AS>",
     "clean": false,
     "topic": "<MQTT_TOPIC_TO_LISTEN_FOR_MESSAGES_ON>",
-    "brightness": <BRIGHTNESS_VALUE>
+    "brightness": <BRIGHTNESS_VALUE>,
+    "frequency": <OPTIONAL_FREQUENCY_VALUE>
 }
 ```
 
@@ -25,7 +26,7 @@ The expected MQTT topic payload looks like this, with `brightness` and `target` 
 ```
 
 ## Notes
-* The `brightness` value in the configuration file and the MQTT payload is the brightness that will be set when the display is on. Values seem to vary even between HyperPixels panels, on one of mine 130000 is a decent brightness without being eye-searing, but on the other anything below 145000 will turn the display entirely off. You may need to experiment.
+* The `brightness` value in the configuration file and the MQTT payload is the brightness that will be set when the display is on (this is actually the duty cycle value for the [Node.js pigpio library](https://github.com/fivdi/pigpio/)). Values seem to vary even between HyperPixels panels, on one of mine 24000 is a decent brightness without being eye-searing, but on the other anything below 25000 will turn the display entirely off. You may need to experiment. The frequency that `pipgio` can also optionally be set with the `frequency` value in `config.json`.
 * The `target` value is to target a specific host if you have more than one listening on the same MQTT topic. The value to provide here is the same as what's returned with `node -e "console.log(require('os').hostname())"` on the machine with the display attached.
 * I recommend using [PM2](https://pm2.keymetrics.io) to keep the app running and to start it at boot.
 * Because this talks to the GPIO ports directly by way of the [pigpio](https://github.com/fivdi/pigpio), it _must_ be run as root.
