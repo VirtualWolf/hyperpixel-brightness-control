@@ -25,26 +25,28 @@ client.on('error', (err) => console.error(err));
 client.on('message', (topic, message) => {
     console.debug(`Message received on topic ${topic}: ${message.toString()}`);
 
-    const frequency = config.frequency
-        ? config.frequency
-        : 8000;
-
     try {
         const json = JSON.parse(message.toString());
 
         const hostname = os.hostname();
         const target = json.target;
 
+        if (target && target !== hostname) {
+            console.debug(`Message is for hostname ${target}, ignoring it`)
+
+            return;
+        }
+
+        const frequency = json.frequency
+            ? json.frequency
+            : config.frequency
+                ? config.frequency
+                : 8000;
+
         if (json.is_on === true || json.brightness) {
             const brightness = json.brightness
                 ? json.brightness
                 : config.brightness;
-
-            if (target && target !== hostname) {
-                console.debug(`Message is for hostname ${target}, ignoring it`)
-
-                return;
-            }
 
             console.debug(`Turning display on with frequency ${frequency} and duty cycle ${brightness}`);
 
