@@ -4,6 +4,7 @@ const mqtt = require('mqtt');
 const config = require('./config.json');
 
 const pin = new Gpio(19, {mode: Gpio.OUTPUT});
+const hostname = os.hostname();
 
 const client = mqtt.connect({
     servers: [{
@@ -14,7 +15,7 @@ const client = mqtt.connect({
     clean: config.clean || true,
 });
 
-client.subscribe(config.topic, {
+client.subscribe([config.topic, `${config.topic}/${hostname}`], {
     qos: 2,
 });
 
@@ -27,15 +28,6 @@ client.on('message', (topic, message) => {
 
     try {
         const json = JSON.parse(message.toString());
-
-        const hostname = os.hostname();
-        const target = json.target;
-
-        if (target && target !== hostname) {
-            console.debug(`Message is for hostname ${target}, ignoring it`)
-
-            return;
-        }
 
         const frequency = json.frequency
             ? json.frequency
